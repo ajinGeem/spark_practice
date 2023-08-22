@@ -1,39 +1,74 @@
-class Person(val name: String, val age: Int, var x: Int, var y: Int) {
-  def walkTo(x: Int, y: Int): Unit = {
+// Trait for Person
+trait Person {
+  val name: String
+  val age: Int
+  val speed: Int
+  var x: Int = 0
+  var y: Int = 0
+
+  // Method to walk to a location
+  def walk(x: Int, y: Int): Unit = {
     this.x = x
     this.y = y
-    println(s"${name} is walking to (${x}, ${y})")
+    println(s"$name is walking to ($x, $y)")
+  }
+
+  // Method to run to a location
+  def run(x: Int, y: Int): Unit = {
+    this.x = x
+    this.y = y
+    println(s"$name is running to ($x, $y)")
+  }
+
+  // Method to swim to a location
+  def swim(x: Int, y: Int): Unit = {
+    this.x = x
+    this.y = y
+    println(s"$name is swimming to ($x, $y)")
+  }
+
+  // Method to display information
+  def displayInfo(): Unit = {
+    println(s"Name: $name")
+    println(s"Age: $age")
+    println(s"Speed: $speed")
+    println(s"Current Location: ($x, $y)")
   }
 }
 
-class Child(name: String, age: Int, x: Int, y: Int) extends Person(name, age, x, y) {
-  val speed: Int = 5
+// Class for Child
+class Child(val name: String, val age: Int, val speed: Int) extends Person
 
-  def runTo(x: Int, y: Int): Unit = {
-    this.x = x
-    this.y = y
-    println(s"${name} is running to (${x}, ${y})")
-  }
+// Class for Parent
+class Parent(val name: String, val age: Int, val speed: Int) extends Person
 
-  def swimTo(x: Int, y: Int): Unit = {
-    this.x = x
-    this.y = y
-    println(s"${name} is swimming to (${x}, ${y})")
-  }
+// Class for Grandparent
+class Grandparent(val name: String, val age: Int, val speed: Int) extends Person
+
+// Main function
+def main(args: Array[String]): Unit = {
+  // Create instances of Person
+  val child = new Child("Child", 10, 5)
+  val parent = new Parent("Parent", 40, 3)
+  val grandparent = new Grandparent("Grandparent", 70, 1)
+
+  // Display information of all people
+  child.displayInfo()
+  parent.displayInfo()
+  grandparent.displayInfo()
+
+  // Walk to (1, 1)
+  child.walk(1, 1)
+  parent.walk(1, 1)
+  grandparent.walk(1, 1)
+
+  // Run to (2, 2)
+  child.run(2, 2)
+  parent.run(2, 2)
+
+  // Swim to (3, -1)
+  child.swim(3, -1)
 }
 
-class Grandparent(name: String, age: Int, x: Int, y: Int) extends Person(name, age, x, y) {
-  val speed: Int = 1
-}
-
-val person = new Person("Person", 30, 0, 0)
-val child = new Child("Child", 10, 0, 0)
-val grandparent = new Grandparent("Grandparent", 70, 0, 0)
-
-println(s"Person: Name - ${person.name}, Age - ${person.age}, Speed - N/A, Current Position - (${person.x}, ${person.y})")
-println(s"Child: Name - ${child.name}, Age - ${child.age}, Speed - ${child.speed}, Current Position - (${child.x}, ${child.y})")
-println(s"Grandparent: Name - ${grandparent.name}, Age - ${grandparent.age}, Speed - ${grandparent.speed}, Current Position - (${grandparent.x}, ${grandparent.y})")
-
-person.walkTo(1, 1)
-child.runTo(2, 2)
-child.swimTo(3, -1)
+// Execute the main function
+main(Array())
