@@ -12,6 +12,10 @@ class QuizDay3 extends App {
 //  val aggregateDf3 = groupByDf2.agg(stddev(col("depdelay")), stddev(col("arrdelay")))
 //  aggregatedDf3.limit(10).show()
 //  export SPARK_LOCAL_IP="127.0.0.1"
+
+  val conf = new SparkConf().setAppName("Correlation Calculation")
+  val sc = new SparkContext(conf)
+  
   val sparkHome = System.getenv("SPARK_HOME")
   val logDir = s"file:${sparkHome}/event"
   val spark = SparkSession.builder()
@@ -27,3 +31,14 @@ class QuizDay3 extends App {
   val path = s"${dataPath}/input/2008.csv"
 
   val rdd = spark.sparkContext.textFile(path)
+  val filteredRDD = rdd
+    .map(_.split(","))
+    .filter(_.length >= 29) // Assuming year and delay columns are at least in indices 29 and 15 respectively
+    .map(fields => (fields(29).toInt, fields(15).toDouble))
+
+  val year_delay_rdd = filteredRDD
+    .map { case (year, delay) => Vectors.dense(year.toDouble, delay) }
+
+  val corr = Statistics.corr(year_delay_rdd, "pearson")
+  println(s"Correlation between year and delay: ${corr}")
+}
